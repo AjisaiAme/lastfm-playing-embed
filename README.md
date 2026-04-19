@@ -1,43 +1,65 @@
-# Astro Starter Kit: Minimal
+# Lastfm Playing Embed
 
-```sh
-npm create astro@latest -- --template minimal
+Display a user's most recent last.fm activity to embed on `readme.md` with a dynamic SVG status card. Deployed via Netlify.
+## Usage
+To embed on your `readme.md`
+```md
+[![ALT TEXT](https://lastfm-playing-embed.netlify.app/.netlify/functions/image?user=LASTFM_USERNAME&theme=THEME)](https://www.last.fm/user/LASTFM_USERNAME)
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## Parameters
+| Param         | Example                                                               | Description                                        |
+| ------------- | --------------------------------------------------------------------- | -------------------------------------------------- |
+| user          | `user=ajisai46`                                                       | Fetch user's last.fm info **(required)**           |
+| theme         | `theme=light` **(default)**  <br>`theme=dark`  <br>`theme=catppuccin` | Theme of the card. Examples below. **(optional)**  |
+| ~~sscrobble~~ | ~~`scrobble=false` **(default)**  <br>`scrobble=true`~~               | ~~Display user's scrobble count. **(optional)** ~~ |
 
-## 🚀 Project Structure
+---
+## Examples
 
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+```
+[![Last.fm Now Playing](https://lastfm-playing-embed.netlify.app/.netlify/functions/image?user=ajisai46)](https://www.last.fm/user/ajisai46)
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+[![Last.fm Now Playing](https://lastfm-playing-embed.netlify.app/.netlify/functions/image?user=ajisai46)](https://www.last.fm/user/ajisai46)
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+```
+[![Last.fm Now Playing](https://lastfm-playing-embed.netlify.app/.netlify/functions/image?user=ajisai46&theme=dark)](https://www.last.fm/user/ajisai46)
+```
 
-Any static assets, like images, can be placed in the `public/` directory.
+[![Last.fm Now Playing](https://lastfm-playing-embed.netlify.app/.netlify/functions/image?user=ajisai46&theme=dark)](https://www.last.fm/user/ajisai46)
 
-## 🧞 Commands
+```
+[![Last.fm Now Playing](https://lastfm-playing-embed.netlify.app/.netlify/functions/image?user=ajisai46&theme=catppuccin)](https://www.last.fm/user/ajisai46)
+```
 
-All commands are run from the root of the project, from a terminal:
+[![Last.fm Now Playing](https://lastfm-playing-embed.netlify.app/.netlify/functions/image?user=ajisai46&theme=catppuccin)](https://www.last.fm/user/ajisai46)
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+---
+## Deploying on Netlify
+Deploying your own project requires your own last.fm API key in a `.env`. [Get an API account](https://www.last.fm/api#getting-started).
 
-## 👀 Want to learn more?
+### Local
+1. Clone the repo
+```
+git clone https://github.com/AjisaiAme/lastfm-playing-embed.git
+```
+1. Install dependencies
+```
+npm install
+```
+1. Create `.env` containing the following variables
+```
+PUBLIC_LASTFM_USER=your_username
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+LASTFM_API_KEY=your_api_key
+```
+1. Run development server
+```
+# local
+npm run dev
+# netlify
+netlify dev
+```
+
+The app will run at [http://localhost:4321](http://localhost:4321) on your browser and [http://localhost:8888](http://localhost:8888) for Netlify.
