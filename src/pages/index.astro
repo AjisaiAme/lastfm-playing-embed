@@ -1,0 +1,22 @@
+---
+import Layout from '../layouts/Layout.astro';
+import LastFmWidget from '../components/LastFMWidget';
+
+const url = new URL(Astro.request.url);
+const theme = url.searchParams.get('theme') || 'light'; 
+const themeClass = theme === 'light' ? '' : `theme-${theme}`;
+---
+
+<Layout title={`Last.fm · ${theme}`}>
+  <main 
+    class={`${themeClass} min-h-screen w-full flex items-center justify-center bg-(--bg-main) transition-colors duration-700 ease-in-out`}
+  >
+    <LastFmWidget client:load />
+  </main>
+</Layout>
+
+<style is:global>
+  main {
+    background-color: var(--bg-main);
+  }
+</style>
