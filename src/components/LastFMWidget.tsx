@@ -29,7 +29,7 @@ export default function LastFmWidget() {
       return;
     }
     try {
-      const apiUrl = (USE_PROXY && !API_KEY_PARAM) 
+      const apiUrl = (USE_PROXY && !API_KEY_PARAM)
         ? `/.netlify/functions/lastfm?user=${USER}`
         : `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${USER}&api_key=${API_KEY_PARAM}&format=json&limit=1`;
 
@@ -58,67 +58,78 @@ export default function LastFmWidget() {
   }, []);
 
   const albumArt = SHOW_ART && track?.image.find(i => i.size === 'extralarge')?.['#text'];
+  const validArt = albumArt && !albumArt.includes('noimage') ? albumArt : null;
   const nowPlaying = track?.['@attr']?.nowplaying === 'true';
+  const albumName = track?.album?.['#text'];
 
   if (loading || error) {
     return (
-      <div className="widget-container flex items-center justify-center h-24 text-[10px] font-mono uppercase tracking-[0.2em] opacity-40">
-        {error || 'Initializing...'}
+      <div className="widget-container flex items-center justify-center h-22">
+        <span className="status-label">{error || 'Initializing...'}</span>
       </div>
     );
   }
 
   return (
-    <div 
-      className={`widget-container group ${nowPlaying ? 'is-playing' : ''}`}
+    <div
+      className={`widget-container ${nowPlaying ? 'is-playing' : ''}`}
       aria-live="polite"
     >
-      {/* Ambient Glow: Using mix-blend-mode for better integration */}
-      {albumArt && (
-        <div 
-          className="absolute inset-0 z-0 opacity-30 scale-150 blur-[80px] saturate-200 pointer-events-none transition-opacity duration-1000"
-          style={{ backgroundImage: `url(${albumArt})`, backgroundSize: 'cover' }}
+      {validArt && (
+        <div
+          className="ambient-glow"
+          style={{ backgroundImage: `url(${validArt})` }}
           aria-hidden="true"
         />
       )}
-      
-      <div className="relative z-10 flex gap-4 items-center">
-        {/* Album Art with decorative border */}
-        <div className="relative shrink-0 w-16 h-16 select-none">
-          <div className="w-full h-full rounded-md overflow-hidden shadow-lg ring-1 ring-black/5 dark:ring-white/10">
-            {albumArt && !albumArt.includes('noimage') ? (
-              <img src={albumArt} alt={`Album cover for ${track?.name}`} className="w-full h-full object-cover" />
+
+      <div className={`accent-bar ${nowPlaying ? 'accent-bar--active' : ''}`} aria-hidden="true" />
+
+      <div className="widget-inner">
+        <div className="art-wrapper">
+          <div className={`art-frame ${nowPlaying ? 'art-frame--playing' : ''}`}>
+            {validArt ? (
+              <img
+                src={validArt}
+                alt={`${track?.name} — ${track?.artist['#text']}`}
+                className="art-img"
+              />
             ) : (
-              <div className="w-full h-full bg-(--text-main) opacity-5 flex items-center justify-center">
-                <div className="w-5 h-5 border border-(--text-main) rounded-full opacity-20" />
+              <div className="art-placeholder">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                  <circle cx="10" cy="10" r="8" stroke="currentColor" strokeWidth="1.5" opacity="0.3" />
+                  <circle cx="10" cy="10" r="3" stroke="currentColor" strokeWidth="1.5" opacity="0.3" />
+                </svg>
               </div>
             )}
           </div>
-          
-          {nowPlaying && (
-            <div 
-              className="absolute -bottom-1 -right-1 flex gap-0.5 items-end h-5 px-1.5 py-1 bg-(--card-bg) backdrop-blur-md rounded-sm border border-(--card-border)"
-              title="Now Playing"
-            >
-              <div className="v-bar animate-v1 bg-(--accent)"></div>
-              <div className="v-bar animate-v2 bg-(--accent)"></div>
-              <div className="v-bar animate-v3 bg-(--accent)"></div>
-            </div>
-          )}
         </div>
 
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2">
-            <span className="text-[9px] font-mono font-bold uppercase tracking-wider text-(--text-muted)">
-              {nowPlaying ? 'Streaming Now' : 'Last Played'}
-            </span>
+        <div className="track-info">
+          <div className="track-label-row">
+            {nowPlaying ? (
+              <>
+                <div className="bars-indicator" aria-hidden="true">
+                  <span className="bar bar-1" />
+                  <span className="bar bar-2" />
+                  <span className="bar bar-3" />
+                </div>
+                <span className="status-label">Now Playing</span>
+              </>
+            ) : (
+              <span className="status-label">Last Played</span>
+            )}
           </div>
-          
-          <h2 className="text-md font-bold truncate text-(--text-main) leading-tight">
-            {track?.name || 'Silence'}
+
+          <h2 className="track-name" title={track?.name}>
+            {track?.name || 'Nothing'}
           </h2>
-          <p className="text-[11px] text-(--text-muted) truncate font-medium mt-0.5">
+
+          <p className="track-artist" title={track?.artist['#text']}>
             {track?.artist['#text'] || 'Unknown Artist'}
+            {albumName && (
+              <span className="track-album"> · {albumName}</span>
+            )}
           </p>
         </div>
       </div>

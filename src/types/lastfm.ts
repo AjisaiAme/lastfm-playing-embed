@@ -5,6 +5,7 @@ export interface LastFmImage {
 
 export interface LastFmTrack {
   artist: { '#text': string; mbid?: string };
+  album?: { '#text': string; mbid?: string };
   name: string;
   url: string;
   image: LastFmImage[];
