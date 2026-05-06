@@ -12,7 +12,6 @@ To embed on your `readme.md`
 | ------------- | --------------------------------------------------------------------- | -------------------------------------------------- |
 | user          | `user=ajisai46`                                                       | Fetch user's last.fm info **(required)**           |
 | theme         | `theme=light` **(default)**  <br>`theme=dark`  <br>`theme=catppuccin` | Theme of the card. Examples below. **(optional)**  |
-| ~~sscrobble~~ | ~~`scrobble=false` **(default)**  <br>`scrobble=true`~~               | ~~Display user's scrobble count. **(optional)** ~~ |
 
 ---
 ## Examples
