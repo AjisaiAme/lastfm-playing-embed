@@ -43,17 +43,17 @@ Deploying your own project requires your own last.fm API key in a `.env`. [Get a
 ```
 git clone https://github.com/AjisaiAme/lastfm-playing-embed.git
 ```
-1. Install dependencies
+2. Install dependencies
 ```
 npm install
 ```
-1. Create `.env` containing the following variables
+3. Create `.env` containing the following variables
 ```
 PUBLIC_LASTFM_USER=your_username
 
 LASTFM_API_KEY=your_api_key
 ```
-1. Run development server
+4. Run development server
 ```
 # local
 npm run dev
