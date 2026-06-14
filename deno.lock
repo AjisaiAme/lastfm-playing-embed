@@ -11,15 +11,21 @@
   "workspace": {
     "packageJson": {
       "dependencies": [
+        "npm:@astrojs/check@~0.9.9",
         "npm:@astrojs/react@^5.0.3",
+        "npm:@netlify/functions@^5.2.0",
         "npm:@tailwindcss/vite@^4.2.2",
+        "npm:@types/node@^25.6.0",
         "npm:@types/react-dom@^19.2.3",
         "npm:@types/react@^19.2.14",
-        "npm:astro@^6.1.8",
+        "npm:astro@^6.4.6",
         "npm:react-dom@^19.2.5",
         "npm:react@^19.2.5",
         "npm:tailwindcss@^4.2.2"
-      ]
+      ],
+      "overrides": {
+        "vite": "^7"
+      }
     }
   }
 }
