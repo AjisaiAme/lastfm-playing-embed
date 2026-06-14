@@ -83,7 +83,10 @@ export default function LastFmWidget() {
         />
       )}
 
-      <div className={`accent-bar ${nowPlaying ? 'accent-bar--active' : ''}`} aria-hidden="true" />
+      <div
+        className={`accent-bar ${nowPlaying ? 'accent-bar--active' : ''}`}
+        aria-hidden="true"
+      />
 
       <div className="widget-inner">
         <div className="art-wrapper">
@@ -97,8 +100,8 @@ export default function LastFmWidget() {
             ) : (
               <div className="art-placeholder">
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-                  <circle cx="10" cy="10" r="8" stroke="currentColor" strokeWidth="1.5" opacity="0.3" />
-                  <circle cx="10" cy="10" r="3" stroke="currentColor" strokeWidth="1.5" opacity="0.3" />
+                  <circle cx="10" cy="10" r="8" stroke="currentColor" strokeWidth="1.5" opacity="0.25" />
+                  <circle cx="10" cy="10" r="3" stroke="currentColor" strokeWidth="1.5" opacity="0.25" />
                 </svg>
               </div>
             )}
@@ -114,7 +117,7 @@ export default function LastFmWidget() {
                   <span className="bar bar-2" />
                   <span className="bar bar-3" />
                 </div>
-                <span className="status-label">Now Playing</span>
+                <span className="status-label" style={{ marginLeft: '20px' }}>Now Playing</span>
               </>
             ) : (
               <span className="status-label">Last Played</span>

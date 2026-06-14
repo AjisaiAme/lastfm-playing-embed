@@ -64,43 +64,45 @@ export const handler: Handler = async (event: HandlerEvent) => {
     const trunc = (s: string, max: number) => s.length > max ? s.slice(0, max - 1) + '…' : s;
     const artistLine = albumName ? `${trunc(artistName, 20)} • ${trunc(albumName, 18)}` : trunc(artistName, 38);
 
+    const labelX = isPlaying ? 116 : 96;
+
     const bars = isPlaying ? `
-      <g transform="translate(96, 22)">
-        <rect x="0" width="2" rx="1" fill="${t.accent}"><animate attributeName="height" values="3;8;3" dur="0.7s" repeatCount="indefinite"/><animate attributeName="y" values="5;0;5" dur="0.7s" repeatCount="indefinite"/></rect>
-        <rect x="3.5" width="2" rx="1" fill="${t.accent}"><animate attributeName="height" values="3;8;3" dur="0.9s" begin="0.1s" repeatCount="indefinite"/><animate attributeName="y" values="5;0;5" dur="0.9s" begin="0.1s" repeatCount="indefinite"/></rect>
-        <rect x="7" width="2" rx="1" fill="${t.accent}"><animate attributeName="height" values="3;8;3" dur="0.6s" begin="0.2s" repeatCount="indefinite"/><animate attributeName="y" values="5;0;5" dur="0.6s" begin="0.2s" repeatCount="indefinite"/></rect>
-      </g>` : '';
+    <g transform="translate(96, 22)">
+      <rect x="0" width="2" rx="1" fill="${t.accent}"><animate attributeName="height" values="3;8;3" dur="0.7s" repeatCount="indefinite"/><animate attributeName="y" values="5;0;5" dur="0.7s" repeatCount="indefinite"/></rect>
+      <rect x="4" width="2" rx="1" fill="${t.accent}"><animate attributeName="height" values="3;8;3" dur="0.9s" begin="0.1s" repeatCount="indefinite"/><animate attributeName="y" values="5;0;5" dur="0.9s" begin="0.1s" repeatCount="indefinite"/></rect>
+      <rect x="8" width="2" rx="1" fill="${t.accent}"><animate attributeName="height" values="3;8;3" dur="0.6s" begin="0.2s" repeatCount="indefinite"/><animate attributeName="y" values="5;0;5" dur="0.6s" begin="0.2s" repeatCount="indefinite"/></rect>
+    </g>` : '';
 
-    const labelX = isPlaying ? 112 : 96;
+   const svg = `
+      <svg width="320" height="88" viewBox="0 0 320 88" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <clipPath id="card-clip"><rect width="320" height="88" rx="14"/></clipPath>
+        <clipPath id="art-clip"><rect x="14" y="14" width="60" height="60" rx="8"/></clipPath>
+        <style>
+          .lbl { font-family: ui-monospace, 'JetBrains Mono', monospace; font-size: 9px; font-weight: 700; fill: ${t.faint}; letter-spacing: .08em; text-transform: uppercase; }
+          .name { font-family: system-ui, -apple-system, sans-serif; font-size: 13px; font-weight: 700; fill: ${t.text}; }
+          .sub  { font-family: system-ui, -apple-system, sans-serif; font-size: 11px; font-weight: 500; fill: ${t.muted}; }
+        </style>
+      </defs>
 
-    const svg = `
-        <svg width="320" height="88" viewBox="0 0 320 88" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-            <clipPath id="art-clip"><rect x="14" y="14" width="60" height="60" rx="10"/></clipPath>
-            <style>
-            .lbl { font-family: ui-monospace, 'JetBrains Mono', monospace; font-size: 9px; font-weight: 700; fill: ${t.faint}; letter-spacing: 0.1em; text-transform: uppercase; }
-            .name { font-family: system-ui, -apple-system, sans-serif; font-size: 14px; font-weight: 700; fill: ${t.text}; }
-            .sub { font-family: system-ui, -apple-system, sans-serif; font-size: 11px; font-weight: 500; fill: ${t.muted}; }
-            </style>
-        </defs>
+      <rect width="320" height="88" rx="14" fill="${t.card}" stroke="${t.border}" stroke-width="1"/>
 
-        <rect width="320" height="88" rx="16" fill="${t.card}" stroke="${t.border}" stroke-width="1.5"/>
+      <rect x="0" y="28" width="3" height="32" rx="1.5" fill="${isPlaying ? t.accent : t.faint}" opacity="${isPlaying ? 1 : 0.25}"/>
 
-        <rect x="0" y="24" width="3" height="40" rx="1.5" fill="${isPlaying ? t.accent : t.faint}" opacity="${isPlaying ? 1 : 0.3}"/>
+      <rect x="14" y="14" width="60" height="60" rx="8" fill="${t.faint}" opacity="0.12"/>
+      ${base64Art
+        ? `<image href="${base64Art}" x="14" y="14" width="60" height="60" clip-path="url(#art-clip)" preserveAspectRatio="xMidYMid slice"/>`
+        : `<circle cx="44" cy="44" r="10" stroke="${t.faint}" stroke-width="1.5" fill="none" opacity="0.25"/>
+          <circle cx="44" cy="44" r="4"  stroke="${t.faint}" stroke-width="1.5" fill="none" opacity="0.25"/>`
+      }
 
-        <rect x="14" y="14" width="60" height="60" rx="10" fill="${t.faint}" opacity="0.1"/>
-        ${base64Art 
-            ? `<image href="${base64Art}" x="14" y="14" width="60" height="60" clip-path="url(#art-clip)" preserveAspectRatio="xMidYMid slice" />`
-            : `<circle cx="44" cy="44" r="10" stroke="${t.faint}" stroke-width="2" fill="none" opacity="0.2"/><circle cx="44" cy="44" r="4" stroke="${t.faint}" stroke-width="2" fill="none" opacity="0.2"/>`
-        }
+      ${bars}
+      <text x="${labelX}" y="30" class="lbl">${isPlaying ? 'Now Playing' : 'Last Session'}</text>
 
-        ${bars}
-        <text x="${labelX}" y="30" class="lbl">${isPlaying ? 'Now Playing' : 'Last Session'}</text>
+      <text x="96" y="52" class="name">${trunc(trackName, 36)}</text>
+      <text x="96" y="68" class="sub">${artistLine}</text>
 
-        <text x="96" y="52" class="name">${trunc(trackName, 36)}</text>
-        <text x="96" y="70" class="sub">${artistLine}</text>
-
-        </svg>`.trim();
+      </svg>`.trim();
     return { statusCode: 200, headers: successHeaders, body: svg };
   } catch (err) {
     return { statusCode: 500, headers: errorHeaders, body: errorSvg('Internal Server Error') };
